@@ -1,0 +1,105 @@
+###################################################################
+###############               lightgbm          ###################
+
+1.lightgbm.cv()
+2.lightgbm.train()
+3.lightgbm.LGBMClassifier()/lightgbm.LGBMRegressor()
+4.GridSearchCV()
+
+
+1. lightgbm.cv(): test general performance on train and valid datasets
+
+
+
+import lightgbm as lgb
+lgb_data = lgb.Dataset(X, label = y)
+
+
+
+params_1 = {'num_leaves': 54,
+           'min_data_in_leaf': 79,
+           'objective': 'multiclass',
+           'num_class': 5,
+           'metric': 'multi_logloss',
+           'max_depth': -1,
+           'learning_rate': 0.01,
+           'boosting': 'gbdt',
+           'feature_fraction': 0.9,
+         'bagging_fraction': 0.8,
+         'bagging_freq': 5,
+         'verbosity': 200,
+           'reg_alpha': 1.13,
+           'reg_lambda': 0.36}
+
+
+mod_1 = lgb.cv(params = params_1,
+              num_boost_round = 2000,
+              verbose_eval = 200,
+              train_set = lgb_data,
+              early_stopping_rounds = 100,
+              folds = folds_split)
+
+
+
+
+2. lightgbm.train()
+
+import lightgbm as lgb
+
+lgbtrain = lgb.Dataset(X_train, label = y_train)
+lgbvalid = lgb.Dataset(X_valid, label = y_valid)
+
+
+
+params_1 = {'objective': 'multiclass',
+          'num_class': 5,
+         'metric': 'multi_logloss',
+         'num_leaves': 31,
+          'max_depth': 7,
+         'learning_rate': 0.05,
+         'feature_fraction': 0.9,
+         'bagging_fraction': 0.8,
+         'bagging_freq': 5,
+         'verbose': 1}
+
+
+
+mod_1 = lgb.train(params = params_1,
+                 train_set = lgbtrain,
+                 num_boost_round = 5000,
+                 valid_sets = [lgbtrain, lgbvalid],
+                 early_stopping_rounds = 50,
+                 verbose_eval = 40)
+
+
+
+
+params_3 = {'num_leaves': 54,
+           'min_data_in_leaf': 79,
+           'objective': 'multiclass',
+           'num_class': 5,
+           'metric': 'multi_logloss',
+           'max_depth': -1,
+           'learning_rate': 0.01,
+           'boosting': 'gbdt',
+           'feature_fraction': 0.9,
+         'bagging_fraction': 0.8,
+         'bagging_freq': 5,
+         'verbosity': 200,
+           'reg_alpha': 1.13,
+           'reg_lambda': 0.36}
+
+
+
+
+mod_3 = lgb.cv(params = params_3,
+              num_boost_round = 5000,
+              verbose_eval = 200,
+              train_set = lgb_data,
+              early_stopping_rounds = 100,
+              folds = folds_split)
+
+
+
+3. 
+
