@@ -1,0 +1,118 @@
+#############################################################
+#############################################################
+GBM family template
+XGBoost, Lightgbm, Catboost
+
+#############################################################
+
+
+
+#Xgboost
+
+params_ = {'objective': 'multi:softprob', 'eval_metric': ['mlogloss'], 'num_class': 5}
+model = xgb.train(params=params_, dtrain=train_dmx, num_boost_round=1, early_stopping_rounds=5,
+                  evals=[(valid_dmx, 'validation')], verbose_eval=10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Lightgbm
+
+from sklearn.model_selection import GroupKFold
+
+folds_split = list(GroupKFold(n_splits = 5).split(X,
+                                                 groups = X.loc[:, 'incident_id']))
+folds_split
+
+
+
+import lightgbm as lgb
+
+lgb_train = lgb.Dataset(X, label = y)
+
+
+params_ = {'objective': 'multiclass',
+          'num_class': 5,
+          'metric': 'multi_logloss',
+          'num_leaves': 60,
+          'min_data_in_leaf': 80,
+          'max_depth': -1,
+          'learning_rate': 0.01,
+          'boosting': 'gbdt',
+          'feature_fraction': 0.9,
+          'bagging_fraction': 0.8,
+          'bagging_freq': 5,
+          'verbosity': 200,
+          'reg_alpha': 1.13,
+          'reg_lambda': 0.36}
+
+
+
+mod_3 = lgb.cv(params_,
+              num_boost_round = 5000,
+              verbose_eval = 200,
+              train_set = lgb_train,
+              early_stopping_rounds = 50,
+              folds = folds_split,
+              seed = 123)
+
+
+
+mod_2 = lgb.cv(params_,
+              num_boost_round = 2000,
+              verbose_eval = 200,
+              train_set = lgb_train,
+              early_stopping_rounds = 50,
+              folds = folds_split,
+              seed = 123)
+
+
+
+
+
+#Catboost
+
+from sklearn.model_selection import GroupKFold
+
+folds_split = list(GroupKFold(n_splits = 5).split(X,
+                                                 groups = X.loc[:, 'incident_id']))
+folds_split
+
+
+
+
+mod.fit(X_train, y_train,
+       eval_set = (X_valid, y_valid),
+       early_stopping_rounds = 100,
+       cat_features = feature_ind,
+       plot = True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
